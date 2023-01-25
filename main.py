@@ -14,7 +14,11 @@ from handlers.shop_categories import show_clothes
 from handlers.admin import (example, check_curses, pin_messages, ban_user)
 from handlers.user_info_form import (Form, cancel_handler, form_start, process_name, process_age, process_day, process_done)
 from handlers.admin import yes_no
+from db.base import (init_db, create_table , populate_products)
 
+async  def startapp(_):
+    init_db()
+    create_table()
 
 
 if __name__ == '__main__':
@@ -29,9 +33,9 @@ if __name__ == '__main__':
     dp.register_message_handler(form_start, Text(equals='Нет'), state=Form.done)
     dp.register_callback_query_handler(shop_start, text='shop_start')
     dp.register_message_handler(show_clothes, Text(equals='одежды'))
+    dp.register_callback_query_handler(shop_start, text='buy_item')
     dp.register_message_handler(pin_messages, commands=['pin'], commands_prefix='!/')
     dp.register_message_handler(ban_user, commands=['ban'], commands_prefix='!/')
-    dp.register_message_handler(check_curses)
     dp.register_message_handler(cancel_handler, state='*', commands='cancel')
     dp.register_message_handler(cancel_handler, Text(equals='cancel', ignore_case=True), state='*')
     dp.register_message_handler(process_name, state=Form.name)
@@ -43,8 +47,11 @@ if __name__ == '__main__':
     # всегда в конце
     dp.register_message_handler(example)
     dp.register_message_handler(echo)
+    dp.register_message_handler(check_curses)
 
-    executor.start_polling(dp, skip_updates=True)
+
+    executor.start_polling(dp, skip_updates=True,
+                           on_startup=startapp)
 
 
 
