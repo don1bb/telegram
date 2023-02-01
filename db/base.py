@@ -27,9 +27,13 @@ def create_table():
          address TEXT,
          weeks TEXT,
          product_id INTEGER,
-               """
-
-
+         FOREIGN KEY (product_id)
+              REFERENCES products (product_id)
+              ON DELETE CASCADE
+        )
+        """
+    )
+    db.commit()
 def populate_products ():
     """
         запоняем таблицу
@@ -48,6 +52,23 @@ def get_products():
     SELECT * FROM products
     """)
     return cur.fetchall()
-def
+def create_order(data):
+    '''
+    Создаем заказ
+    '''
+    print(data.as_dict())
+    data = data.as_dict()
+    cur.execute("""INSERT INTO orders (
+       user_name,
+       address,
+       week_day,
+       product_id
+    ) VALUES (:user_name, :address, :week_day, :product_id"""),
+    {'user_name': data['name'],
+     'address': data['address'],
+     'week_day': data['day'],
+     'product_id': data['product_id']
+     }
 
+    db.commit()
 

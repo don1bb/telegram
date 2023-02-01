@@ -20,7 +20,7 @@ async def check_user_is_admin(message: types.Message):
 
 
 async def check_curses(message: types.Message):
-    BAD_WORDS = ["тупой", 'дурак', "мал"]
+    BAD_WORDS = ["тупой", 'дурак', 'пидр','бля','сука','ебать' ,'долбаеб' ,"мал"]
     if message.chat.type != 'private':
         for word in BAD_WORDS:
             if message.text.lower().replace(' ', '').count(word):
